@@ -33,11 +33,14 @@ app.get('/arts', async (req, res) => {
     const store = await(await fetch('https://collectionapi.metmuseum.org/public/collection/v1/objects')).json();
     const availableIds = store.objectIDs;
 
-    var item_id = availableIds[Math.floor(Math.random()*availableIds.length)];
-    const object = await(await fetch('https://collectionapi.metmuseum.org/public/collection/v1/objects/' + item_id)).json();
-
+    var img = "";
+    while(img === ""){
+        var item_id = availableIds[Math.floor(Math.random()*availableIds.length)];
+        const object = await(await fetch('https://collectionapi.metmuseum.org/public/collection/v1/objects/' + item_id)).json();
+        img = object.primaryImageSmall;
+    }
     res.send({
-        img: object.primaryImageSmall,
+        img: img,
         name: object.title
     })
 })
