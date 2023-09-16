@@ -28,6 +28,19 @@ app.get('/time', (req,res)=>{
     res.send(dateObject.toTimeString().slice(0,8))
 })
 
+app.get('/arts', async (req, res) => {
+    const store = await(await fetch('https://collectionapi.metmuseum.org/public/collection/v1/objects')).json();
+    const availableIds = store.objectIDs;
+
+    var item_id = availableIds[Math.floor(Math.random()*items.length)];
+    const object = await(await fetch('https://collectionapi.metmuseum.org/public/collection/v1/objects/' + item_id)).json();
+
+    res.send({
+        img: object.primaryImageSmall,
+        name: object.title
+    })
+})
+
 const httpServer = http.createServer(app);
 const httpsServer = https.createServer(credentials,app);
 
