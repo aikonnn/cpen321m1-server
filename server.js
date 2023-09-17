@@ -4,6 +4,7 @@ var app = express();
 var http = require('http');
 var https = require('https');
 var fs = require('fs');
+var fetch = require('cross-fetch');
 
 const privateKey = fs.readFileSync('/etc/letsencrypt/live/aikonnn.canadacentral.cloudapp.azure.com/privkey.pem','utf8');
 const certificate = fs.readFileSync('/etc/letsencrypt/live/aikonnn.canadacentral.cloudapp.azure.com/cert.pem','utf8');
@@ -32,7 +33,7 @@ app.get('/arts', async (req, res) => {
     const store = await(await fetch('https://collectionapi.metmuseum.org/public/collection/v1/objects')).json();
     const availableIds = store.objectIDs;
 
-    var item_id = availableIds[Math.floor(Math.random()*items.length)];
+    var item_id = availableIds[Math.floor(Math.random()*availableIds.length)];
     const object = await(await fetch('https://collectionapi.metmuseum.org/public/collection/v1/objects/' + item_id)).json();
 
     res.send({
